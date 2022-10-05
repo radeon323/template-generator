@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<#include "include.html">
+<br>
+<h1>i'm ${person}</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Age</th>
+    </tr>
+    </thead>
+    <tbody>
+        <#list persons as person>
+            <tr>
+                <th scope="row">${person.id}</th>
+                <td>${person.name}</td>
+                <td>${person.age}</td>
+            </tr>
+        </#list>
+    </tbody>
+</table>
+
+
+</body>
+</html>
