@@ -20,30 +20,22 @@ public class ValueTemplateProcessor implements TemplateProcessor {
 
     @Override
     public String process() {
-        TemplateCreator creator = new TemplateCreator();
-        Template template = creator.create(path, parameters);
-        String content = template.getContent();
-
+        String content = getContent();
         String processedContent = content;
         Map<String, String> receivedParameters = getParameters(content);
 
         for (Map.Entry<String, String> entry : receivedParameters.entrySet()) {
             if (entry.getKey().contains(".")) {
-                StringBuilder className = new StringBuilder(entry.getKey());
-                className.replace(entry.getKey().indexOf("."), entry.getKey().length(), "");
+                String className = getEntryClassName(entry);
+                String fieldName = getEntryFieldName(entry);
 
-                StringBuilder fieldName = new StringBuilder(entry.getKey());
-                fieldName.replace(0, entry.getKey().indexOf(".") + 1, "");
-
-                Object objectFromParameters = parameters.get(className.toString());
-                String simpleName = objectFromParameters.getClass().getSimpleName();
-                String objectName = objectFromParameters.toString().replace(simpleName + "(", "").replace(")", "");
-                String field = fieldName.toString();
-
-                String[] sentences = objectName.split(", ");
-                for (String s : sentences) {
-                    String replace = s.replace(field + "=", "");
-                    if (s.contains(field)) {
+                Object objectFromParameters = parameters.get(className);
+                String classNameFormParameters = objectFromParameters.getClass().getSimpleName();
+                String entityFields = objectFromParameters.toString().replace(classNameFormParameters + "(", "").replace(")", "");
+                String[] fields = entityFields.split(", ");
+                for (String field : fields) {
+                    String replace = field.replace(fieldName + "=", "");
+                    if (field.contains(fieldName)) {
                         processedContent = processedContent.replace(entry.getValue(), replace);
                     }
                 }
@@ -54,7 +46,25 @@ public class ValueTemplateProcessor implements TemplateProcessor {
         return processedContent;
     }
 
-    private Map<String, String> getParameters(String content) {
+    String getContent() {
+        TemplateCreator creator = new TemplateCreator();
+        Template template = creator.create(path, parameters);
+        return template.getContent();
+    }
+
+    String getEntryClassName(Map.Entry<String, String> entry) {
+        StringBuilder className = new StringBuilder(entry.getKey());
+        className.replace(entry.getKey().indexOf("."), entry.getKey().length(), "");
+        return className.toString();
+    }
+
+    String getEntryFieldName(Map.Entry<String, String> entry) {
+        StringBuilder fieldName = new StringBuilder(entry.getKey());
+        fieldName.replace(0, entry.getKey().indexOf(".") + 1, "");
+        return fieldName.toString();
+    }
+
+    Map<String, String> getParameters(String content) {
         Matcher matcherBracket = usdBracesPattern.matcher(content);
         Map<String, String> parameters = new HashMap<>();
         while (matcherBracket.find()) {
@@ -64,4 +74,6 @@ public class ValueTemplateProcessor implements TemplateProcessor {
         }
         return parameters;
     }
+
+
 }
