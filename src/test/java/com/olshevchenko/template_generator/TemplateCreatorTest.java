@@ -1,6 +1,7 @@
 package com.olshevchenko.template_generator;
 
 import com.olshevchenko.template_generator.entity.Template;
+import com.olshevchenko.template_generator.utils.TemplateCreator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -16,11 +17,9 @@ class TemplateCreatorTest {
 
     @Test
     void testCreateTemplate() {
-        String content = "<h1>Hello</h1>";
+        String content = "Hello";
         Template expectedTemplate = new Template(content, parameters);
         Template actualTemplate = new TemplateCreator().create(path, parameters);
         assertEquals(expectedTemplate, actualTemplate);
     }
-
-
 }

@@ -1,6 +1,5 @@
 package com.olshevchenko.template_generator.processor;
 
-import com.olshevchenko.template_generator.TemplateCreator;
 import lombok.AllArgsConstructor;
 
 import java.util.HashMap;
@@ -15,19 +14,15 @@ import java.util.regex.Pattern;
 public class ValueTemplateProcessor implements TemplateProcessor {
     private static final Pattern usdBracesPattern = Pattern.compile("\\$\\{\\w.+?}");
     private final Map<String, Object> parameters;
-    private final String path;
 
     @Override
-    public String process() {
-        String content = new TemplateCreator().create(path, parameters).getContent();
+    public String process(String content) {
         String processedContent = content;
         Map<String, String> receivedParameters = getParameters(content);
-
         for (Map.Entry<String, String> entry : receivedParameters.entrySet()) {
             if (entry.getKey().contains(".")) {
                 String className = getEntryClassName(entry);
                 String fieldName = getEntryFieldName(entry);
-
                 Object objectFromParameters = parameters.get(className);
                 String classNameFormParameters = objectFromParameters.getClass().getSimpleName();
                 String entityFields = objectFromParameters.toString().replace(classNameFormParameters + "(", "").replace(")", "");

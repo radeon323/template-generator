@@ -1,6 +1,6 @@
 package com.olshevchenko.template_generator.processor;
 
-import com.olshevchenko.template_generator.TemplateCreator;
+import com.olshevchenko.template_generator.utils.TemplateCreator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -17,13 +17,14 @@ class IncludeTemplateProcessorTest {
 
     @BeforeAll
     static void init() {
-        processor = new IncludeTemplateProcessor(path);
+        processor = new IncludeTemplateProcessor();
     }
 
     @Test
     void testProcess() {
+        String content = new TemplateCreator().create(path).getContent();
         String expectedPage = "Hello World";
-        String actualPage = processor.process();
+        String actualPage = processor.process(content);
         assertEquals(expectedPage, actualPage);
     }
 

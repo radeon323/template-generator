@@ -1,4 +1,4 @@
-package com.olshevchenko.template_generator;
+package com.olshevchenko.template_generator.templater;
 
 import java.util.Map;
 

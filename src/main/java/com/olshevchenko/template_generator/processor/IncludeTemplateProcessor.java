@@ -1,6 +1,6 @@
 package com.olshevchenko.template_generator.processor;
 
-import com.olshevchenko.template_generator.TemplateCreator;
+import com.olshevchenko.template_generator.utils.TemplateCreator;
 import com.olshevchenko.template_generator.entity.Template;
 import lombok.AllArgsConstructor;
 
@@ -15,11 +15,9 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 public class IncludeTemplateProcessor implements TemplateProcessor {
     private static final Pattern includePattern = Pattern.compile("<#\\w.+?>");
-    private final String path;
 
     @Override
-    public String process() {
-        String content = new TemplateCreator().create(path).getContent();
+    public String process(String content) {
         String processedContent = content;
         Map<String, String> receivedParameters = getParameters(content);
         for (Map.Entry<String, String> entry : receivedParameters.entrySet()) {

@@ -1,8 +1,7 @@
 package com.olshevchenko.template_generator.processor;
 
-import com.olshevchenko.template_generator.TemplateCreator;
-import lombok.AllArgsConstructor;
-import lombok.ToString;
+import com.olshevchenko.template_generator.processor.entity.Person;
+import com.olshevchenko.template_generator.utils.TemplateCreator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -20,13 +19,14 @@ class ValueTemplateProcessorTest {
 
     @BeforeAll
     static void init() {
-        processor = new ValueTemplateProcessor(parameters, path);
+        processor = new ValueTemplateProcessor(parameters);
     }
 
     @Test
     void testProcess() {
+        String content = new TemplateCreator().create(path).getContent();
         String expectedPage = "name Sasha age 41 person Person(id=1, name=Sasha, age=41)";
-        String actualPage = processor.process();
+        String actualPage = processor.process(content);
         assertEquals(expectedPage, actualPage);
     }
 
@@ -57,12 +57,4 @@ class ValueTemplateProcessorTest {
     }
 
 
-}
-
-@AllArgsConstructor
-@ToString
-class Person {
-    private int id;
-    private String name;
-    private int age;
 }
