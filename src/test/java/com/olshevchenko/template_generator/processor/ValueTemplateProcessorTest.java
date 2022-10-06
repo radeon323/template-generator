@@ -1,5 +1,6 @@
 package com.olshevchenko.template_generator.processor;
 
+import com.olshevchenko.template_generator.TemplateCreator;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,7 +20,7 @@ class ValueTemplateProcessorTest {
 
     @BeforeAll
     static void init() {
-        processor = new ValueTemplateProcessor(path, parameters);
+        processor = new ValueTemplateProcessor(parameters, path);
     }
 
     @Test
@@ -30,16 +31,9 @@ class ValueTemplateProcessorTest {
     }
 
     @Test
-    void testGetContent() {
-        String expectedContent = "name ${person.name} age ${person.age} person ${person}";
-        String actualContent = processor.getContent();
-        assertEquals(expectedContent, actualContent);
-    }
-
-    @Test
     void testGetParameters() {
         Map<String, String> expectedParams = Map.of("person.age", "${person.age}","person.name", "${person.name}","person", "${person}");
-        String actualContent = processor.getContent();
+        String actualContent = new TemplateCreator().create(path, parameters).getContent();
         Map<String, String> actualParams = processor.getParameters(actualContent);
         assertEquals(expectedParams, actualParams);
     }

@@ -20,4 +20,9 @@ public class TemplateCreator {
         }
         return template;
     }
+
+    public Template create(String path) {
+        return create(path, Map.of());
+    }
+
 }
