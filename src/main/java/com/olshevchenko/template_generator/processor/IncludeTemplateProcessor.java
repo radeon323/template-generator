@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  */
 @AllArgsConstructor
 public class IncludeTemplateProcessor implements TemplateProcessor {
-    private static final Pattern includePattern = Pattern.compile("<#\\w.+?>");
+    private static final Pattern includePattern = Pattern.compile("<#includ\\w.+?>");
 
     @Override
     public String process(String content) {

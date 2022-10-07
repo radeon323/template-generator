@@ -7,5 +7,5 @@ import java.util.Map;
  */
 public interface Templater {
     String getPage(String path);
-    String getPage(String path, Map<String, String> parameters);
+    String getPage(String path, Map<String, Object> parameters);
 }
