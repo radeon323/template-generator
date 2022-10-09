@@ -1,7 +1,7 @@
 package com.olshevchenko.template_generator.processor;
 
+import com.olshevchenko.template_generator.entity.Template;
 import com.olshevchenko.template_generator.processor.entity.Person;
-import com.olshevchenko.template_generator.utils.TemplateCreator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -13,28 +13,28 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Oleksandr Shevchenko
  */
 class ValueTemplateProcessorTest {
-    private static final String path = "src/test/resources/testValueProcess.html";
+    private static final String content = "name ${person.name} age ${person.age} person ${person}";
     private static final Map<String, Object> parameters = Map.of("person", new Person(1, "Sasha", 41));
     private static ValueTemplateProcessor processor;
+    private static Template template;
 
     @BeforeAll
     static void init() {
-        processor = new ValueTemplateProcessor(parameters);
+        processor = new ValueTemplateProcessor();
+        template = new Template(content, parameters);
     }
 
     @Test
     void testProcess() {
-        String content = new TemplateCreator().create(path).getContent();
         String expectedPage = "name Sasha age 41 person Person(id=1, name=Sasha, age=41)";
-        String actualPage = processor.process(content);
-        assertEquals(expectedPage, actualPage);
+        processor.process(template);
+        assertEquals(expectedPage, template.getContent());
     }
 
     @Test
     void testGetParameters() {
         Map<String, String> expectedParams = Map.of("person.age", "${person.age}","person.name", "${person.name}","person", "${person}");
-        String actualContent = new TemplateCreator().create(path, parameters).getContent();
-        Map<String, String> actualParams = processor.getParameters(actualContent);
+        Map<String, String> actualParams = processor.getParameters(content);
         assertEquals(expectedParams, actualParams);
     }
 

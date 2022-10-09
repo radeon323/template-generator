@@ -1,7 +1,6 @@
-package com.olshevchenko.template_generator;
+package com.olshevchenko.template_generator.utils;
 
 import com.olshevchenko.template_generator.entity.Template;
-import com.olshevchenko.template_generator.utils.TemplateCreator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

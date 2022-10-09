@@ -1,5 +1,6 @@
 package com.olshevchenko.template_generator.processor;
 
+import com.olshevchenko.template_generator.entity.Template;
 import lombok.AllArgsConstructor;
 
 import java.util.HashMap;
@@ -13,10 +14,11 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 public class ValueTemplateProcessor implements TemplateProcessor {
     private static final Pattern usdBracesPattern = Pattern.compile("\\$\\{\\w.+?}");
-    private final Map<String, Object> parameters;
 
     @Override
-    public String process(String content) {
+    public void process(Template template) {
+        Map<String, Object> parameters = template.getParameters();
+        String content = template.getContent();
         String processedContent = content;
         Map<String, String> receivedParameters = getParameters(content);
         for (Map.Entry<String, String> entry : receivedParameters.entrySet()) {
@@ -37,7 +39,7 @@ public class ValueTemplateProcessor implements TemplateProcessor {
                 processedContent = processedContent.replace(entry.getValue(), parameters.get(entry.getKey()).toString());
             }
         }
-        return processedContent;
+        template.setContent(processedContent);
     }
 
     String getEntryClassName(Map.Entry<String, String> entry) {

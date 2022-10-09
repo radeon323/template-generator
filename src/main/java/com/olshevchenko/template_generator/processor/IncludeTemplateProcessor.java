@@ -1,7 +1,7 @@
 package com.olshevchenko.template_generator.processor;
 
-import com.olshevchenko.template_generator.utils.TemplateCreator;
 import com.olshevchenko.template_generator.entity.Template;
+import com.olshevchenko.template_generator.utils.TemplateCreator;
 import lombok.AllArgsConstructor;
 
 import java.util.HashMap;
@@ -17,15 +17,16 @@ public class IncludeTemplateProcessor implements TemplateProcessor {
     private static final Pattern includePattern = Pattern.compile("<#includ\\w.+?>");
 
     @Override
-    public String process(String content) {
+    public void process(Template template) {
+        String content = template.getContent();
         String processedContent = content;
         Map<String, String> receivedParameters = getParameters(content);
         for (Map.Entry<String, String> entry : receivedParameters.entrySet()) {
             String path = entry.getKey();
-            Template template = new TemplateCreator().create(path);
-            processedContent = processedContent.replace(entry.getValue(), template.getContent());
+            String contentToReplace = new TemplateCreator().create(path).getContent();
+            processedContent = processedContent.replace(entry.getValue(), contentToReplace);
         }
-        return processedContent;
+        template.setContent(processedContent);
     }
 
     Map<String, String> getParameters(String content) {

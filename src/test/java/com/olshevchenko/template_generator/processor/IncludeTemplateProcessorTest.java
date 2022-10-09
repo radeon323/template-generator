@@ -1,6 +1,6 @@
 package com.olshevchenko.template_generator.processor;
 
-import com.olshevchenko.template_generator.utils.TemplateCreator;
+import com.olshevchenko.template_generator.entity.Template;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -12,27 +12,27 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Oleksandr Shevchenko
  */
 class IncludeTemplateProcessorTest {
-    private static final String path = "src/test/resources/testIncludeProcess.html";
+    private static final String content = "<#include \"src/test/resources/include.html\"> World";
     private static IncludeTemplateProcessor processor;
+    private static Template template;
 
     @BeforeAll
     static void init() {
         processor = new IncludeTemplateProcessor();
+        template = new Template(content, Map.of());
     }
 
     @Test
     void testProcess() {
-        String content = new TemplateCreator().create(path).getContent();
         String expectedPage = "Hello World";
-        String actualPage = processor.process(content);
-        assertEquals(expectedPage, actualPage);
+        processor.process(template);
+        assertEquals(expectedPage, template.getContent());
     }
 
     @Test
     void testGetParameters() {
         Map<String, String> expectedParams = Map.of("src/test/resources/include.html", "<#include \"src/test/resources/include.html\">");
-        String actualContent = new TemplateCreator().create(path).getContent();
-        Map<String, String> actualParams = processor.getParameters(actualContent);
+        Map<String, String> actualParams = processor.getParameters(content);
         assertEquals(expectedParams, actualParams);
     }
 }
